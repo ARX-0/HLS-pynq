@@ -42,3 +42,13 @@ Max and Avg latncy being 27 and Min II being 28
 
 see timing of starting and ending 67314-114 ns = 67.2us (which is 16,800 cycles)
 
+## optmistaions 
+
+![image](https://github.com/user-attachments/assets/621350ed-5226-49c8-9889-842cad93d04b)
+
+### can be optimsed as 
+
+![image](https://github.com/user-attachments/assets/8c89b3a1-d327-45ee-8556-bb4f5adaee3b)
+
+this is called code refactoring 
+
