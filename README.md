@@ -50,5 +50,5 @@ see timing of starting and ending 67314-114 ns = 67.2us (which is 16,800 cycles)
 
 ![image](https://github.com/user-attachments/assets/8c89b3a1-d327-45ee-8556-bb4f5adaee3b)
 
-this is called code refactoring 
+this is called code refactoring (seperating 0 case from the first case and going forward)
 
