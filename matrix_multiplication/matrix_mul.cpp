@@ -2,7 +2,7 @@
 #include <iostream>
 
 typedef int integer;
-typedef int N,M,P;
+int N,M,P;
 
 void matrixmul(integer A[N][M],integer B[M][P], integer AB[N][P]){
 row:for(integer i = 0 ; i<N ; ++i){
