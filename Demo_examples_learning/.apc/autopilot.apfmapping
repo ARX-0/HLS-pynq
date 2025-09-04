@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="loop_imperfect.cpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\Pipelining\loop_imperfect.cpp"/>
+    <originFiles name="loop_imperfect.hpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\Pipelining\loop_imperfect.hpp"/>
+    <originFiles name="loop_perfect.cpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\loop_perfect.cpp"/>
+    <originFiles name="loop_pipeline.cpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\loop_pipeline.cpp"/>
+    <originFiles name="loop_pipeline.hpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\loop_pipeline.hpp"/>
+    <originFiles name="pipeline.cpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\Pipelining\pipeline.cpp"/>
+    <originFiles name="pipeline.hpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\Pipelining\pipeline.hpp"/>
+  </source>
+  <testbench>
+    <originFiles name="loop_imperfect_test.cpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\loop_imperfect_test.cpp"/>
+    <originFiles name="loop_pipeline_test.cpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\loop_pipeline_test.cpp"/>
+    <originFiles name="pipeline.tb" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\Pipelining\pipeline.tb"/>
+    <originFiles name="pipeline_tb.cpp" path="C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\Pipelining\pipeline_tb.cpp"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>

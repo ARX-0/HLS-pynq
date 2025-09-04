@@ -1,0 +1,9 @@
+<xilinx:hls_fe_msgs>
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="C:/Users/varad/OneDrive/Documents/GitHub/HLS-pynq/Demo_examples_learning/solution1/csynth.tcl:21:9" msg_body="HLS pragma dump">
+        <args ARG_PragmaContext="directive" ARG_PragmaFunction="loop_imperfect" ARG_PragmaIsValid="1" ARG_PragmaOptions="name=loop_imperfect" ARG_PragmaType="top" ClangWarningOption="dump-hls-pragmas"/>
+    </msg>
+    <msg msg_groups="" msg_id="207-812" msg_severity="ERROR" msg_loc="loop_perfect.cpp:2:10" msg_body="'loop_imperfect.hpp' file not found">
+        <args/>
+    </msg>
+</xilinx:hls_fe_msgs>
+

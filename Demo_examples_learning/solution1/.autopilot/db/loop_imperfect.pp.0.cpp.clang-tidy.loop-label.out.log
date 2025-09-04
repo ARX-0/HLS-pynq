@@ -1,0 +1,25 @@
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:29212:7: warning: Added loop label VITIS_LOOP_1207_1:   [xilinx-label-all-loops]
+      for (i = 0; i < __N - 1; ++i) {
+      ^~~
+      VITIS_LOOP_1207_1: 
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:29212:7: note: FIX-IT applied suggested code changes
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:30186:5: warning: Added loop label VITIS_LOOP_676_1:   [xilinx-label-all-loops]
+    for (unsigned i = low; i != high; ++i) {
+    ^~~
+    VITIS_LOOP_676_1: 
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:30186:5: note: FIX-IT applied suggested code changes
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:30200:5: warning: Added loop label VITIS_LOOP_690_1:   [xilinx-label-all-loops]
+    for (unsigned i = low; i != high; ++i) {
+    ^~~
+    VITIS_LOOP_690_1: 
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:30200:5: note: FIX-IT applied suggested code changes
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:30214:5: warning: Added loop label VITIS_LOOP_704_1:   [xilinx-label-all-loops]
+    for (unsigned i = low; i != high; ++i) {
+    ^~~
+    VITIS_LOOP_704_1: 
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:30214:5: note: FIX-IT applied suggested code changes
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:31843:7: warning: Added loop label VITIS_LOOP_1247_1:   [xilinx-label-all-loops]
+      for (i = 0; i < __N - 1; ++i) {
+      ^~~
+      VITIS_LOOP_1247_1: 
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp:31843:7: note: FIX-IT applied suggested code changes

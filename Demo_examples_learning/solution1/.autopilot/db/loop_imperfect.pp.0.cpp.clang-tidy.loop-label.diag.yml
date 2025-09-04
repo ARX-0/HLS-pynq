@@ -1,0 +1,49 @@
+---
+MainSourceFile:  'C:/Users/varad/OneDrive/Documents/GitHub/HLS-pynq/Demo_examples_learning/solution1/.autopilot/db/loop_imperfect.pp.0.cpp'
+Diagnostics:     
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_1207_1:  '
+    FileOffset:      1207
+    FilePath:        'C:\Xilinx\Vitis_HLS\2023.2\common\technology\autopilot\etc\ap_int_base.h'
+    Replacements:    
+      - FilePath:        'C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp'
+        Offset:          859419
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_1207_1: '
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_676_1:  '
+    FileOffset:      676
+    FilePath:        'C:\Xilinx\Vitis_HLS\2023.2\common\technology\autopilot\etc\ap_int_ref.h'
+    Replacements:    
+      - FilePath:        'C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp'
+        Offset:          1086743
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_676_1: '
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_690_1:  '
+    FileOffset:      690
+    FilePath:        'C:\Xilinx\Vitis_HLS\2023.2\common\technology\autopilot\etc\ap_int_ref.h'
+    Replacements:    
+      - FilePath:        'C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp'
+        Offset:          1087207
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_690_1: '
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_704_1:  '
+    FileOffset:      704
+    FilePath:        'C:\Xilinx\Vitis_HLS\2023.2\common\technology\autopilot\etc\ap_int_ref.h'
+    Replacements:    
+      - FilePath:        'C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp'
+        Offset:          1087672
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_704_1: '
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_1247_1:  '
+    FileOffset:      1247
+    FilePath:        'C:\Xilinx\Vitis_HLS\2023.2\common\technology\autopilot\etc\ap_fixed_base.h'
+    Replacements:    
+      - FilePath:        'C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\.autopilot\db\loop_imperfect.pp.0.cpp'
+        Offset:          1370954
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_1247_1: '
+...

@@ -1,0 +1,16 @@
+INFO: [SIM 2] *************** CSIM start ***************
+INFO: [SIM 4] CSIM will launch GCC as the compiler.
+   Generating csim.exe
+Makefile.rules:317: recipe for target 'csim.exe' failed
+obj/loop_pipeline_test.o: In function `main':
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\csim\build/../../../../loop_pipeline_test.cpp:3: multiple definition of `main'
+obj/loop_imperfect_test.o:C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\csim\build/../../../../loop_imperfect_test.cpp:3: first defined here
+obj/pipeline_tb.o: In function `main':
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\csim\build/../../../Pipelining/pipeline_tb.cpp:3: multiple definition of `main'
+obj/loop_imperfect_test.o:C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\csim\build/../../../../loop_imperfect_test.cpp:3: first defined here
+obj/loop_pipeline_test.o: In function `main':
+C:\Users\varad\OneDrive\Documents\GitHub\HLS-pynq\Demo_examples_learning\solution1\csim\build/../../../../loop_pipeline_test.cpp:17: undefined reference to `loop_pipeline(int*)'
+collect2.exe: error: ld returned 1 exit status
+make: *** [csim.exe] Error 1
+ERR: [SIM 100] 'csim_design' failed: compilation error(s).
+INFO: [SIM 3] *************** CSIM finish ***************
