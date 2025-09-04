@@ -52,3 +52,50 @@ see timing of starting and ending 67314-114 ns = 67.2us (which is 16,800 cycles)
 
 this is called code refactoring (seperating 0 case from the first case and going forward)
 
+
+# Matrix multiplication before and after optimisation 
+
+## What we need to know 
+
+![image](https://github.com/user-attachments/assets/9c06175e-fd44-4351-ab4c-a5650321a543)
+
+A = [ [ a00 a01 a02 a03 a04 a05 a06 a07 ]   // Row 0
+      [ a10 a11 a12 a13 a14 a15 a16 a17 ]   // Row 1
+      [ a20 a21 a22 a23 a24 a25 a26 a27 ]   // Row 2
+      [ a30 a31 a32 a33 a34 a35 a36 a37 ] ] // Row 3
+
+### In Block partioning  (type=block dim=1 factor=4)
+
+Partition 0: a00 a01 a02 a03     | Partition 1: a04 a05 a06 a07
+Partition 0: a10 a11 a12 a13     | Partition 1: a14 a15 a16 a17
+Partition 0: a20 a21 a22 a23     | Partition 1: a24 a25 a26 a27
+Partition 0: a30 a31 a32 a33     | Partition 1: a34 a35 a36 a37
+
+### In cyclic patrioning (type=cyclic dim=1 factor=4)
+
+Partition 0: a00 a04     | Partition 1: a01 a05     | Partition 2: a02 a06     | Partition 3: a03 a07
+Partition 0: a10 a14     | Partition 1: a11 a15     | Partition 2: a12 a16     | Partition 3: a13 a17
+Partition 0: a20 a24     | Partition 1: a21 a25     | Partition 2: a22 a26     | Partition 3: a23 a27
+Partition 0: a30 a34     | Partition 1: a31 a35     | Partition 2: a32 a36     | Partition 3: a33 a37
+
+### In complete partitioning (type=complete dim=1)
+
+Row 0: [ a00 ][ a01 ][ a02 ][ a03 ][ a04 ][ a05 ][ a06 ][ a07 ]
+Row 1: [ a10 ][ a11 ][ a12 ][ a13 ][ a14 ][ a15 ][ a16 ][ a17 ]
+Row 2: [ a20 ][ a21 ][ a22 ][ a23 ][ a24 ][ a25 ][ a26 ][ a27 ]
+Row 3: [ a30 ][ a31 ][ a32 ][ a33 ][ a34 ][ a35 ][ a36 ][ a37 ]
+
+![image](https://github.com/user-attachments/assets/49919201-d0a7-4bf1-842f-b0eff10fc47c)
+
+## Before
+![image](https://github.com/user-attachments/assets/3bb7cfb0-aecc-4cbe-ac38-9338bda90ae4)
+
+![image](https://github.com/user-attachments/assets/2b59cd6b-773e-4938-b8d7-fbbd4975c65b)
+
+## After
+
+![image](https://github.com/user-attachments/assets/fff5a384-9cf0-452c-9196-a264a4f498df)
+
+![image](https://github.com/user-attachments/assets/4fca4248-0970-46ad-b159-95c5dc855477)
+
+
