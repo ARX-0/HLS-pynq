@@ -297,8 +297,21 @@ elementResult += (lhs.m_matrix_Data[lhsLinearIndex] * rhs.m_matrix_Data[rhsLinea
 		return result;
 	}
 }
+//equality check
+template <class T> bool qbMatrix2<T>::operator== (const qbMatrix2<T> rhs){
+if((this->m_nRows != rhs.m_nRows) && (this->m_nCols != rhs.m_nCols))
+	return false;
 
+	bool flag = true;
+	for(int i = 0; i<this->m_nElements; ++i){
+		if(this->m_matrix_Data[i] != rhs.m_matrix_Data[i])
+			flag = false;
+	}
+	return flag;
 
+}
+
+// the private class Sub2Ind
 template <class T> int qbMatrix2<T>::Sub2Ind(int row, int col){
 	if((row < m_nRows) && (row >= 0) && (col < m_nCols) && (col >=0)){
        return (row * m_nCols) + col ;
