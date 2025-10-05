@@ -396,7 +396,7 @@ bool qbMatrix2<T>::CloseEnough(T f1, T f2) {
 	return std::fabs(f1 - f2) < 1e-9;
 }
 
-template <class T> bool qbMatrix2<T>::Seperate(qbMatrix2<T> *matrix1 , qbMatrix2<T> matrix2, int colNum){
+template <class T> bool qbMatrix2<T>::Seperate(qbMatrix2<T> *matrix1 , qbMatrix2<T> *matrix2, int colNum){
 int numRows = m_nRows;
 int numCols1 = m_nCols;
 int numCols2 = m_nCols - colNum;
