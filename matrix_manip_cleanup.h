@@ -153,6 +153,180 @@ void qbMatrix2<T>::SettoIdentity() {
         for (int j = 0; j < m_nCols; j++)
             m_matrix_Data[Sub2Ind(i, j)] = (i == j) ? 1.0 : 0.0;
 }
+// ---------------- Overloading Operators ----------//
+
+// matrix + matrix
+template <class T> 
+qbMatrix2<T> operator+ (const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs){
+int numRows = lhs.m_nRows;
+int numCols = lhs.m_nCols;
+int numElements = numRows*numCols;
+T *tempResult = new T[numElements];
+for(int i=0;i<numElements;i++)
+#pragma HLS PIPELINE
+	tempResult = lhs.m_matrix_Data[i] + rhs.m_matrix_Data[i];
+
+qbMatrix2<T> result(numRows,numCols,tempResult);
+delete[] tempResult;
+return result;
+}
+
+//scalar + matrix
+
+template<class T>
+qbMatrix2<T> operator+ (const T& lhs,const qbMatrix2<T>& rhs){
+	int numRows = rhs.m_nRows;
+	int numCols = rhs.m_nCols;
+	int num_Elements = numCols*numRows;
+	T *tempResult = new T[num_Elements];
+	for(int i=0 ; i< num_Elements; i++){
+#pragma HLS PIPELINE
+tempResult[i] = lhs + rhs.m_matrix_Data[i];
+	}
+qbMatrix2<T> result(numRows, numCols, tempResult);
+delete [] tempResult;
+return result;
+}
+
+//matrix + scalar
+template<class T> qbMatrix2<T> operator+ (const qbMatrix2<T>& lhs,const T& rhs){
+	int numRows = rhs.m_nRows;
+	int numCols = rhs.m_nCols;
+	int num_Elements = numCols*numRows;
+	T *tempResult = new T[num_Elements];
+	for(int i=0 ; i< num_Elements; i++){
+#pragma HLS PIPELINE
+tempResult[i] = lhs.m_matrix_Data[i] + rhs;
+	}
+qbMatrix2<T> result(numRows, numCols, tempResult);
+delete [] tempResult;
+return result;
+}
+
+// matrix - matrix
+template <class T> qbMatrix2<T> operator- (const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs){
+int numRows = lhs.m_nRows;
+int numCols = lhs.m_nCols;
+int numElements = numRows * numCols;
+T *tempResult = new T[numElements];
+for(int i=0 ; i<numElements ; i++)
+#pragma HLS PIPELINE
+	tempResult = lhs.m_matrix_Data[i] - rhs.m_matrix_Data[i];
+
+qbMatrix2<T> result(numRows,numCols,tempResult);
+delete[] tempResult;
+return result;
+}
+
+//scalar - matrix
+template<class T> qbMatrix2<T> operator- (const T& lhs,const qbMatrix2<T>& rhs){
+	int numRows = rhs.m_nRows;
+	int numCols = rhs.m_nCols;
+	int num_Elements = numCols*numRows;
+	T *tempResult = new T[num_Elements];
+	for(int i=0 ; i< num_Elements; i++){
+#pragma HLS PIPELINE
+tempResult[i] = lhs - rhs.m_matrix_Data[i];
+	}
+qbMatrix2<T> result(numRows, numCols, tempResult);
+delete [] tempResult;
+return result;
+}
+
+//matrix - scalar
+template<class T> qbMatrix2<T> operator- (const qbMatrix2<T>& lhs,const T& rhs){
+	int numRows = rhs.m_nRows;
+	int numCols = rhs.m_nCols;
+	int num_Elements = numCols*numRows;
+	T *tempResult = new T[num_Elements];
+	for(int i=0 ; i< num_Elements; i++){
+#pragma HLS PIPELINE
+tempResult[i] = lhs.m_matrix_Data[i] - rhs;
+	}
+qbMatrix2<T> result(numRows, numCols, tempResult);
+delete [] tempResult;
+return result;
+}
+
+//matrix * scalar
+template <class T> qbMatrix2<T> operator* (const qbMatrix2<T>& lhs, const T& rhs){
+int numRows = lhs.m_nRows;
+int numCols = lhs.m_nCols;
+int numElements = numRows*numCols;
+T *tempResult = new T[numElements];
+for(int i=0;i<numElements;i++)
+#pragma HLS PIPELINE
+	tempResult = lhs.m_matrix_Data[i] * rhs;
+
+qbMatrix2<T> result(numRows,numCols,tempResult);
+delete[] tempResult;
+return result;
+}
+
+//scalar * matrix
+template <class T> qbMatrix2<T> operator* (const T& lhs, const qbMatrix2<T>& rhs){
+int numRows = rhs.m_nRows;
+int numCols = rhs.m_nCols;
+int numElements = numRows*numCols;
+T *tempResult = new T[numElements];
+for(int i=0;i<numElements;++i)
+#pragma HLS PIPELINE
+	tempResult = lhs * rhs.m_matrix_Data[i];
+
+qbMatrix2<T> result(numRows,numCols,tempResult);
+delete[] tempResult;
+return result;
+}
+
+
+//elementResult += (lhs.m_matrix_Data[lhsLinearIndex] * rhs.m_matrix_Data[rhsLinearIndex]);
+//matrix * matrix
+template <class T>
+qbMatrix2<T> operator*(const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
+    int r_numRows = rhs.m_nRows;
+    int r_numCols = rhs.m_nCols;
+    int l_numRows = lhs.m_nRows;
+    int l_numCols = lhs.m_nCols;
+    if (l_numCols == r_numRows) {
+        T* tempResult = new T[lhs.m_nRows * rhs.m_nCols];
+        for (int lhsRow = 0; lhsRow < l_numRows; lhsRow++) {
+#pragma HLS PIPELINE
+            for (int rhsCol = 0; rhsCol < r_numCols; rhsCol++) {
+                T elementResult = T(0);
+                for (int lhsCol = 0; lhsCol < l_numCols; lhsCol++) {
+#pragma HLS UNROLL
+                    int lhsLinearIndex = (lhsRow * l_numCols) + lhsCol;
+                    int rhsLinearIndex = (lhsCol * r_numCols) + rhsCol;
+                    elementResult += (lhs.m_matrix_Data[lhsLinearIndex] * rhs.m_matrix_Data[rhsLinearIndex]);
+                }
+                int resultLinearIndex = (lhsRow * r_numCols) + rhsCol;
+                tempResult[resultLinearIndex] = elementResult;
+            }
+        }
+        qbMatrix2<T> result(l_numRows, r_numCols, tempResult);
+        delete[] tempResult;
+        return result;
+    } else {
+        qbMatrix2<T> result(1, 1);
+        return result;
+    }
+}
+
+// the == operator overloading. 
+template <class T>
+bool qbMatrix2<T>::operator==(const qbMatrix2<T>& rhs) {
+    // Check if the matrices are of same size, if not return false.
+    if ((this->m_nRows != rhs.m_nRows) && (this->m_nCols != rhs.m_nCols))
+        return false;
+    // Check if the elements are equal
+    bool flag = true;
+    for (int i = 0; i < this->m_nElements; ++i) {
+        if (!CloseEnough(this->m_matrix_Data[i], rhs.m_matrix_Data[i]))
+            flag = false;
+    }
+    return flag;
+}
+
 
 // ---------------- Element Access ---------------- //
 
@@ -185,11 +359,118 @@ int qbMatrix2<T>::Sub2Ind(int row, int col) const {
 }
 
 template<class T>
-bool qbMatrix2<T>::IsSquare() { return m_nRows == m_nCols; }
+bool qbMatrix2<T>::IsSquare() { 
+    if(m_nRows == m_nCols){
+    return true;
+}else{returnn false;}
+}
 
 template<class T>
 bool qbMatrix2<T>::CloseEnough(T f1, T f2) {
     return std::fabs(f1 - f2) < 1e-9;
+}
+
+template<class T>
+bool qbMatrix2<T>::Seperate(qbmatrix2<T> *matrix1, qbmatrix<T> *matrix2, int colNum){
+    //Compute the sizes of the new matrices.
+
+    int numRows = m_nRows;
+    int numCols1 = colNum;
+    int numCols2 = m_nCols - colNum;
+
+    //resize the matrix to fit the new sizes
+    matrix1->resize(numRows,numCols1);
+    matrix2->resize(numRows,numCols2);
+
+    //loop over the original matrix, and copy the elements to the new matrices
+    for(int row = 0 ; row < m_nRows; ++row){
+        for(int col = 0 ; col<m_nCols ; ++col){
+            if(col < colNum){
+                matrix1->SetElement(row, col, this->GetElement(row, col));
+            }
+            else{
+                matrix2->SetElement(row, col-colNum, this->GetElement(row,col));
+            }
+        }
+}
+return true; // what is this?
+}
+
+template <class T>
+bool qbMatrix2<T> Join(const qbMatrix2<T>& matrix2){
+    int numRows1 = m_nRows;
+    int numRows2 = matrix2.m_nRows;
+    int numCols1 = m_nCols;
+    int numCols2 = matrix2.m_nCols;
+
+    if(numRows1 != numRows2){
+        throw std::invalid_argument("Matrices must have the same number of rows to join");
+
+        //Alocate the memory for the result
+        //Note that only the number of columns increases.
+        T* newMatrixData = new T[numRows1 * (numCols1+numCols2)];
+
+        //coppy the two matrices into the new matrix
+        int linearIndex, resultLinearIndex;
+        for(int row = 0 ; row < numRows1 ; ++row){
+            for(int col = 0 ; col <(numCols1+numCols2) ; ++col){
+                resultLinearIndex = row * (numCols1 + numCols2) + col;
+
+                if(col < numCols1){
+                    linearIndex = (row * numCols1) + col;
+                    newMatrixData[resultLinearIndex] = m_matrix_Data[linearIndex];
+                }//othewrwise thew j must be on the right hand side of the matrix, we get it from there
+                else{
+                    linearIndex = (row * numCols2) + (col - numCols1);
+                    newMatrixData[resultLinearIndex] = matrix2.m_matrix_Data[linearIndex];
+                }
+            }
+        }
+}
+
+m_nCols = numCols1 + numCols2;
+m_nElements = m_nRows * m_nCols;
+delete[] m_matrix_Data;
+m_matrix_Data = new T[m_nElements];
+for(int i=0 ; i<m_nElements ; ++i)
+    m_matrix_Data[i] = newMatrixData[i];
+
+delete[] newMatrixData;
+return true;
+}
+
+template <class T>
+int qbMatrix2<T>::SwapRow(int i,int j){
+ 
+    //Store a temporary copy of row i
+    T* tempRow = new T[m_nCols];
+
+    for(int k=0 ; k<m_nCols ; ++k){
+        tempRow[k] = m_matrix_Data[Sub2Ind(i,k)];
+    }
+    for(int k=0 ; k<m_nCols ; ++k){
+        m_matrix_Data[Sub2Ind(i,k)] = m_matrix_Data[Sub2Ind(j,k)];
+    }
+    for(int k=0 ; k<m_nCols ; ++k){
+        m_matrix_Data[Sub2Ind(j,k)] = tempRow[k];
+    }
+    //basic swap temp = a; a = b; b = temp;
+    delete[] tempRow;
+}
+
+template <class T>
+void qbMatrix2<T>::MultAdd(int i, int j, T multFactor){
+    //Multiply row j by multFactor and add to row i
+    for(int col=0 ; col<m_nCols ; ++col){
+        m_matrix_Data[Sub2Ind(i,col)] += (multFactor * m_matrix_Data[Sub2Ind(j,col)]);
+    }
+}
+
+template <class T>
+void qbMatrix2<T>::RowMult(int i, T multFactor){
+    for(int col=0 ; col<m_nCols ; ++col){
+        m_matrix_Data[Sub2Ind(i,col)] *= multFactor;
+    }
 }
 
 // ---------------- Print ---------------- //
@@ -202,5 +483,127 @@ void qbMatrix2<T>::PrintMatrix() {
         std::cout << "\n";
     }
 }
+//just lifted this code out of the test code.....
 
-#endif
+// ---------------- Inverse function ---------------- //
+
+
+template <class T>
+bool qbMatrix2<T>::Inverse() {
+    IF(!IsSquare()) {
+        throw std::invalid_argument("Matrix must be square to compute inverse");
+    }
+
+    //if we get to here the matrix is square, and invertable.
+
+    //form an identity matrix of the same size as this matrix that you wish to invert
+    qbMatrix2<T> identityMatrix(m_nRows, m_nCols);
+    identityMatrix.SettoIdentity();
+
+int originalNumCols = m_nCols;
+    //Join the identity matrix to this matrix to form an augmented matrix
+    Join(identityMatrix);
+    
+    //Begin the Gauss Jordan elimination process
+    int cRow, cCol;
+    int maxCount = 100;
+    int count = 0;
+    bool completeFlag = false;
+    while((!completeFlag) && (count < maxCount)){
+        for (int diagIndex=0; diagIndex <m_nRows ; ++diagIndex){
+            cRow = diagIndex;
+            cCol = diagIndex;
+
+            //find the row with the largest element in this column
+            int maxIndex = FindRowWithMaxElement(cCol, cRow);
+
+            if(maxIndex != cRow){
+                //swap the current row with the row with the largest element
+                //std::cout << "Swapping row " << cRow << " with row " << maxIndex << std::endl;
+                SwapRow(cRow, maxIndex);
+            }
+            
+            //make the diagonal element 1 by multiplying the row by the inverse of the diagonal element
+            if(m_matrix_Data[Sub2Ind(cRow,cCol)] != 0){
+                T multFactor = 1.0 / m_matrixData[Sub2Ind(cRow,cCol)];
+                RowMult(cRow, multFactor);
+                //std::cout << "Making diagonal element 1 by multiplying row " << cRow << " by " << multFactor << std::endl;
+            }
+
+//Consider the Columns
+for(int rowIndex = cRow+1 ; rowIndex<m_nRows ; ++rowIndex){
+if(!CloseEnough(m_matrixData[Sub2Ind(rowIndex,cCol)],0.0)){
+//Obtain the element to work with from the matrix diagonal
+//As we aim to set all the diagonal elements to 1, this should
+//always be valid for a matrix that can be inverted
+int rowOneIndex = cCol;
+
+//Get the value stored at the current element.
+T currentElement = m_matrixData[Sub2Ind(rowIndex,cCol)];
+// value stored as (rowIndex, cCol) in the matrix
+T rowOneValue = m_matrixData[Sub2Ind(rowOneIndex,cCol)];
+
+if(!CloseEnough(rowOneValue,0.0)){
+//Calculate the multiplication factor to be used to eliminate the current element
+T correctionFactor = -(currentElement/rowOneValue);
+
+MultAdd(rowIndex, rowOneIndex, correctionFactor);
+
+//std::cout << "Multiply row " << rowOneIndex << " by " << correctionFactor << " and add to row " << rowIndex << std::endl;
+// "and add to row " << rowIndex << std::endl;
+}
+}
+//std::cout << "Eliminating element at (" << rowIndex << "," << c
+}
+
+
+//consider the row.
+for(int colIndex = cCol+1 ; colIndex<m_nCols ; ++colIndex){
+    if(!CloseEnough(m_matrix_Data[Sub2Ind(cRow,colIndex)],0.0)){
+        //Obtain the element to work with from the matrix diagonal
+        //As we aim to set all the diagonal elements to 1, this should
+        //always be valid for a matrix that can be inverted.
+        int rowOneIndex = cCol;
+        //Get the value stored at the current element.
+        T currentElement = m_matrix_Data[Sub2Ind(cRow,colIndex)];
+        //get the value stored at the diagonal element
+        T rowOneValue = m_matrix_Data[Sub2Ind(rowOneIndex,colIndex)];
+        //if this is equal to zero, we cannot proceed
+        if(!CloseEnough(rowOneValue,0.0)){
+            //compute the correction factor
+            // (required to reduce the element at (cRow,colIndex) to zero.
+            T correctionFactor = -(currentElement/rowOneValue);
+            //To make the element at (cRow,colIndex) zero, we need to add -currentElement multiplied by the row containing the diagonal element
+            //the row at rowOneIndex
+            MultAdd(cRow, rowOneIndex, correctionFactor);
+        }
+    }
+}
+
+//separate the result into the left and the right halves 
+
+qbMatrix2<T> leftHalf;
+qbMatrix2<T> rightHalf;
+this->Seperate(&leftHalf, &rightHalf, originalNumCols);
+
+//When the process is complete, the left half should be the identity matrix, and the right half should be the inverse of the original matrix
+if(leftHalf == identityMatrix){
+    //set completedFlag to true to indicate success
+    completeFlag = true;
+
+    //rebuild this matrix to be the right half
+    m_nCols = originalNumCols;
+    m_nElements = m_nRows * m_nCols;
+    delete[] m_matrix_Data;
+    m_matrix_Data = new T[m_nElements];
+    for(int i=0 ; i<m_nElements ; ++i){
+        m_matrix_Data[i] = rightHalf.m_matrix_Data[i];
+    }
+    //increment the count
+    count++;
+}
+//return if the process was successful
+ return completeFlag;
+    }
+}
+}
