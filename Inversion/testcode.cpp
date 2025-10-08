@@ -7,8 +7,8 @@
 #include <math.h>
 #include <sstream>
 #include <fstream>
-#include "matrix.hpp"
-#include "Inv.hpp"
+
+#include "matrix_manip_cleanup.h"
 
 using namespace std;
 
@@ -24,20 +24,25 @@ void qbMatrix2<T>::PrintMatrix() {
 }
 */
 int main() {
-    std::string filename = "../Downloads/test_matrices.csv";
+    std::string filename = "test_matrices.csv";
 
     /*Openfile*/
     ifstream input(filename);
     if(input.is_open()){
 
-        //the file has one headder line containing the number of rows and columns of each matrix
+        //the file has one header line containing the number of rows and columns of each matrix
         std::string currline;
         getline(input, currline);
 
-        /*  This line is in the format "# n" where n is the number we want, so we need to split the string around the position of the space*/
-    size_t spacepos = currline.find(" ");
-    std::string nrows_str = currline.substr(spacepos, currline.length());
-int nRows = atoi(nrows_str.c_str());
+        // Accept both "# n" and "n" as header
+        int nRows = 0;
+        size_t spacepos = currline.find(" ");
+        if (spacepos != std::string::npos) {
+            std::string nrows_str = currline.substr(spacepos, currline.length());
+            nRows = atoi(nrows_str.c_str());
+        } else {
+            nRows = atoi(currline.c_str());
+        }
 
 //Read the rest of the file and parse each line as we go.
 std::stringstream ss;
@@ -130,7 +135,7 @@ cout<<"Num failures = " << numFailures << std::endl;
 
 //print out any failed matrices
 for(qbMatrix2<double>* currentMatrix : failedMatrices){
-    PrintMatrix(*currentMatrix);
+    currentMatrix->PrintMatrix();
 }
     return 0;
 }
