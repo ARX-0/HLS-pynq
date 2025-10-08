@@ -39,7 +39,8 @@ public:
 
     // Comparison
     bool operator==(const qbMatrix2<T>& rhs);
-    bool Compare(const qbMatrix2<T>& matrix1, double tolerance);
+    // Deprecated: Use the global Compare function instead.
+    // bool Compare(const qbMatrix2<T>& matrix1, double tolerance);
 
     // Operator overloads
     template <class U> friend qbMatrix2<U> operator+(const qbMatrix2<U>& lhs, const qbMatrix2<U>& rhs);
@@ -56,6 +57,10 @@ public:
 
     bool Seperate(qbMatrix2<T>* matrix1, qbMatrix2<T>* matrix2, int colNum);
 
+public:
+    T* m_matrix_Data;
+    int m_nRows, m_nCols, m_nElements;
+
 private:
     int Sub2Ind(int row, int col) const;
     bool IsSquare();
@@ -66,9 +71,6 @@ private:
     bool Join(const qbMatrix2<T>& matrix2);
     int FindRowWithMaxElement(int colNumber, int StartingRow);
     void PrintMatrix();
-
-    T* m_matrix_Data;
-    int m_nRows, m_nCols, m_nElements;
 };
 
 // ---------------- Constructors & Destructor ---------------- //
@@ -450,6 +452,42 @@ int qbMatrix2<T>::FindRowWithMaxElement(int colNumber, int StartingRow) {
 }
 */
 
+
+// ------------------
+// Global-scope free function Compare
+template <class T>
+bool Compare(const qbMatrix2<T>& matrix1, const qbMatrix2<T>& matrix2, double tolerance) {
+    if (matrix1.m_nRows != matrix2.m_nRows || matrix1.m_nCols != matrix2.m_nCols) {
+        return false;
+    }
+    int m_nelements = matrix1.m_nRows * matrix1.m_nCols;
+    double cummulativeSum = 0.0;
+    for (int i = 0; i < m_nelements; i++) {
+        T element1 = matrix1.m_matrix_Data[i];
+        T element2 = matrix2.m_matrix_Data[i];
+        cummulativeSum += ((element1 - element2) * (element1 - element2));
+    }
+    double finalValue = sqrt(cummulativeSum / ((matrix1.m_nRows * matrix1.m_nCols) - 1));
+    return (finalValue < tolerance);
+}
+///////////////////////////SHID//////////////////////////////////
+template <class T> //to find the greatest element in a row
+int qbMatrix2<T>::FindRowWithMaxElement(int colNumber, int StartingRow){
+	if(colNumber < 0 || colNumber >= m_nCols || StartingRow < 0 || StartingRow >= m_nRows)
+		throw std::out_of_range("Index out of range");
+	int maxRow = StartingRow;
+	T maxValue = std::fabs(m_matrix_Data[Sub2Ind(StartingRow, colNumber)]);
+	for(int row = StartingRow + 1; row < m_nRows; ++row){
+		T currentValue = std::fabs(m_matrix_Data[Sub2Ind(row, colNumber)]);
+		if(currentValue > maxValue){
+			maxValue = currentValue;
+			maxRow = row;
+		}
+	}
+	return maxRow;
+}
+////////////////////////////////////////////////////////////////////
+
 template <class T>
 void qbMatrix2<T>::SwapRow(int i,int j){
  
@@ -582,3 +620,4 @@ int originalNumCols = m_nCols;
     }
     return completeFlag;
 }
+#endif // QBMATRIX2_H
