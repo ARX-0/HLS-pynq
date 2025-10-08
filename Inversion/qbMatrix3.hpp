@@ -1,11 +1,11 @@
 #ifndef QBMATRIX2_H
 #define QBMATRIX2_H
 
-#include <vector>
-#include <cmath>
 #include <stdexcept>
 #include <iostream>
 #include <iomanip>
+#include <math.h>
+#include <vector>
 
 // Template class qbMatrix2 for generic matrix handling
 // Provides constructors, destructors, element access, resize, identity, comparison,
@@ -19,29 +19,23 @@ public:
     qbMatrix2(int nRow, int nCol);
     qbMatrix2(int nRow, int nCol, const T* inputdata);
     qbMatrix2(const qbMatrix2<T>& inputMatrix);
-    qbMatrix2(int nRows, int nCols, const std::vector<T>* inputdata);
+    qbMatrix2(int nRows, int nCols, const std::vector<T> *inputdata);
 
-    // Destructor
+        // Destructor
     ~qbMatrix2();
 
-    // Configuration methods
     bool resize(int numRows, int numCols);
     void SettoIdentity();
-
-    // Element access methods
-    T GetElement(int row, int col) const;
+    T GetElement(int row, int col);
     bool SetElement(int row, int col, const T& value);
-    int GetNumRows() const;
-    int GetNumCols() const;
-
-    // Manipulation methods
-    bool Inverse(); // Not yet implemented fully
-
+    int GetNumRows();
+    int GetNumCols();   
+    
     // Comparison
-    bool operator==(const qbMatrix2<T>& rhs);
-    // Deprecated: Use the global Compare function instead.
-    // bool Compare(const qbMatrix2<T>& matrix1, double tolerance);
+    bool operator==(const qbMatrix2<T>& rhs);    
+    bool Compare(const qbMatrix2<T>& matrix1, double tolerance);
 
+    
     // Operator overloads
     template <class U> friend qbMatrix2<U> operator+(const qbMatrix2<U>& lhs, const qbMatrix2<U>& rhs);
     template <class U> friend qbMatrix2<U> operator+(const U& lhs, const qbMatrix2<U>& rhs);
@@ -56,12 +50,7 @@ public:
     template <class U> friend qbMatrix2<U> operator*(const qbMatrix2<U>& lhs, const U& rhs);
 
     bool Seperate(qbMatrix2<T>* matrix1, qbMatrix2<T>* matrix2, int colNum);
-
 public:
-    T* m_matrix_Data;
-    int m_nRows, m_nCols, m_nElements;
-
-private:
     int Sub2Ind(int row, int col) const;
     bool IsSquare();
     bool CloseEnough(T f1, T f2);
@@ -71,9 +60,13 @@ private:
     bool Join(const qbMatrix2<T>& matrix2);
     int FindRowWithMaxElement(int colNumber, int StartingRow);
     void PrintMatrix();
-};
 
-// ---------------- Constructors & Destructor ---------------- //
+private: //can be used public as testing else its private.
+    T* m_matrix_Data;
+    int m_nRows, m_nCols, m_nElements;
+};
+//*****************************************************************************//
+/////////////////////////////Constructor and Destructor//////////////////////////
 
 template<class T>
 qbMatrix2<T>::qbMatrix2() {
@@ -93,6 +86,7 @@ qbMatrix2<T>::qbMatrix2(int nRows, int nCols) {
     for (int i = 0; i < m_nElements; i++)
         m_matrix_Data[i] = 0.0;
 }
+//Construct the linear array from the input 2D array.
 
 template<class T>
 qbMatrix2<T>::qbMatrix2(int nRows, int nCols, const T* inputData) {
@@ -104,6 +98,7 @@ qbMatrix2<T>::qbMatrix2(int nRows, int nCols, const T* inputData) {
         m_matrix_Data[i] = inputData[i];
 }
 
+//the coppy constructor
 template<class T>
 qbMatrix2<T>::qbMatrix2(const qbMatrix2<T>& inputMatrix) {
     m_nRows = inputMatrix.m_nRows;
@@ -112,6 +107,14 @@ qbMatrix2<T>::qbMatrix2(const qbMatrix2<T>& inputMatrix) {
     m_matrix_Data = new T[m_nElements];
     for (int i = 0; i < m_nElements; i++)
         m_matrix_Data[i] = inputMatrix.m_matrix_Data[i];
+}
+
+template <class T>
+qbMatrix2<T>::~qbMatrix2() {
+    if (m_matrix_Data != nullptr) {
+        delete[] m_matrix_Data;
+        m_matrix_Data = nullptr;
+    }
 }
 
 template<class T>
@@ -124,41 +127,248 @@ qbMatrix2<T>::qbMatrix2(int nRows, int nCols, const std::vector<T>* inputdata) {
         m_matrix_Data[i] = inputdata->at(i);
 }
 
-template <class T>
-qbMatrix2<T>::~qbMatrix2() {
-    if (m_matrix_Data != nullptr) {
-        delete[] m_matrix_Data;
-        m_matrix_Data = nullptr;
-    }
-}
 
-// ---------------- Configuration Methods ---------------- //
+ /*********************************************************/
+ // Configuration Methods
+ /*********************************************************/
 
-template<class T>
+ template <class T>
 bool qbMatrix2<T>::resize(int numRows, int numCols) {
-    if (numRows < 1 || numCols < 1) {
-        if (m_matrix_Data) delete[] m_matrix_Data;
-        m_matrix_Data = nullptr;
-        m_nRows = m_nCols = m_nElements = 0;
-        return false;
-    }
-    delete[] m_matrix_Data;
     m_nRows = numRows;
     m_nCols = numCols;
     m_nElements = m_nRows * m_nCols;
+    delete[] m_matrix_Data;
     m_matrix_Data = new T[m_nElements];
-    for (int i = 0; i < m_nElements; i++)
-        m_matrix_Data[i] = 0.0;
-    return true;
+    if (m_matrix_Data != nullptr) 
+    {
+        for (int i = 0; i < m_nElements; i++)
+            m_matrix_Data[i] = 0.0;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 template<class T>
 void qbMatrix2<T>::SettoIdentity() {
-    if (!IsSquare()) throw std::runtime_error("Identity only for square matrices");
+    if (!IsSquare())
+    throw std::runtime_error("Identity only for square matrices");
+
     for (int i = 0; i < m_nRows; i++)
         for (int j = 0; j < m_nCols; j++)
             m_matrix_Data[Sub2Ind(i, j)] = (i == j) ? 1.0 : 0.0;
 }
+// -
+ //****************************************************** */
+//Element Access Methods
+ //****************************************************** */
+
+ template<class T>
+T qbMatrix2<T>::GetElement(int row, int col) {
+    int linearIndex = Sub2Ind(row, col);
+    if(linearIndex >= 0){
+        return m_matrix_Data[linearIndex];
+    }
+    else {
+        return 0.0;
+    }
+}
+
+template<class T>
+bool qbMatrix2<T>::SetElement(int row, int col, const T& elementValue){
+    int linearIndex = Sub2Ind(row, col);
+    if(linearIndex >= 0){
+        m_matrix_Data[linearIndex] = elementValue;
+        return true;
+    } 
+    else {
+        return false;
+    }
+}
+
+template<class T>
+int qbMatrix2<T>::GetNumRows() { return m_nRows; }
+
+template<class T>
+int qbMatrix2<T>::GetNumCols() { return m_nCols; }
+
+template<class T>
+bool qbMatrix2<T>::Compare(const qbMatrix2<T>& matrix1, double tolerance) {
+   //First check if the matrices are of same size, if not return false.
+   int numRows = matrix1.m_nRows;
+   int numCols = matrix1.m_nCols;
+   if((numRows != m_nRows) || (numCols != m_nCols)){
+       return false;
+   }
+
+   double cummulativeError = 0.0;
+   for(int i=0; i < m_nElements; i++){
+       T element1 = m_matrix_Data[i];
+         T element2 = matrix1.m_matrix_Data[i];
+        cummulativeError += ((element1 - element2) * (element1 - element2));
+   }
+   double finalValue = sqrt(cummulativeError / ((numRows * numCols) - 1));
+   if(finalValue < tolerance)
+         return true;
+    else
+         return false;  
+
+}
+
+template<class T>
+bool qbMatrix2<T>::Seperate(qbMatrix2<T> *matrix1, qbMatrix2<T> *matrix2, int colNum) {
+    // Compute the sizes of the new matrices.
+    int numRows = m_nRows;
+    int numCols1 = colNum;
+    int numCols2 = m_nCols - colNum;
+    // resize the matrix to fit the new sizes
+    matrix1->resize(numRows, numCols1);
+    matrix2->resize(numRows, numCols1);
+    // loop over the original matrix, and copy the elements to the new matrices
+    for (int row = 0; row < m_nRows; ++row) {
+        for (int col = 0; col < m_nCols; ++col) {
+            if (col < colNum) {
+                matrix1->SetElement(row, col, this->GetElement(row, col));
+            } else {
+                matrix2->SetElement(row, col - colNum, this->GetElement(row, col));
+            }
+        }
+    }
+    return true;
+}
+
+
+//******************************************************** */
+// Utility Functions
+//******************************************************** */
+
+template<class T>
+int qbMatrix2<T>::Sub2Ind(int row, int col){
+    if((row < m_nRows) && (row >= 0) && (col < m_nCols) && (col >= 0)){
+        return (row * m_nCols) + col;
+    }
+    else{
+        return -1;
+    }
+}
+
+template<class T>
+bool qbMatrix2<T>::CloseEnough(T f1, T f2) {
+    return std::fabs(f1 - f2) < 1e-9;
+}
+
+template<class T>
+bool qbMatrix2<T>::IsSquare() {
+    if (m_nRows == m_nCols) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <class T>
+void qbMatrix2<T>::RowMult(int i, T multFactor){
+    for(int col=0 ; col<m_nCols ; ++col){
+        m_matrix_Data[Sub2Ind(i,col)] *= multFactor;
+    }
+}
+
+template <class T>
+void qbMatrix2<T>::MultAdd(int i, int j, T multFactor){
+    //Multiply row j by multFactor and add to row i
+    for(int col=0 ; col<m_nCols ; ++col){
+        m_matrix_Data[Sub2Ind(i,col)] += (multFactor * m_matrix_Data[Sub2Ind(j,col)]);
+    }
+}
+/************************************************************** */
+//find the row with the maximum element in a given column starting from a given row
+//returns the row index
+/************************************************************** */
+template <class T>
+int qbMatrix2<T>::FindRowWithMaxElement(int colNumber, int StartingRow){ 
+T tempValue m_matrix_Data[Sub2Ind(StartingRow,colNumber)];
+int rowIndex = StartingRow;
+for(int i=StartingRow+1 ; i<m_nRows ; ++i){
+    if(fabs(m_matrix_Data[Sub2Ind(i,colNumber)]) > fabs(tempValue)){
+        rowIndex = i;
+        tempValue = m_matrix_Data[Sub2Ind(i,colNumber)];
+    }
+}
+return rowIndex;
+}
+/************************************************************** */
+//Swap two rows of the matrix
+//************************************************************** */
+template <class T>
+void qbMatrix2<T>::SwapRow(int i,int j){
+ 
+    //Store a temporary copy of row i
+    T* tempRow = new T[m_nCols];
+
+    for(int k=0 ; k<m_nCols ; ++k){
+        tempRow[k] = m_matrix_Data[Sub2Ind(i,k)];
+    }
+    for(int k=0 ; k<m_nCols ; ++k){
+        m_matrix_Data[Sub2Ind(i,k)] = m_matrix_Data[Sub2Ind(j,k)];
+    }
+    for(int k=0 ; k<m_nCols ; ++k){
+        m_matrix_Data[Sub2Ind(j,k)] = tempRow[k];
+    }
+    //basic swap temp = a; a = b; b = temp;
+    delete[] tempRow;
+}
+
+/************************************************************** */
+//Join two matrices horizontally
+/************************************************************** */
+
+template <class T>
+bool qbMatrix2<T>::Join(const qbMatrix2<T>& matrix2) {
+    int numRows1 = m_nRows;
+    int numCols1 = m_nCols;
+    int numRows2 = matrix2.m_nRows;
+    int numCols2 = matrix2.m_nCols;
+
+    if(numRows1 != numRows2) {
+        return false; // Matrices must have the same number of rows to join
+    }
+
+    //Alocate memory for the new matrix
+    T *newMatrixData = new T[(numCols1 + numCols2) * numRows1];
+
+    int linearIndex, resultLinearIndex;
+    for(int i = 0; i< numRows1; ++i) {
+        for(int j = 0; j < numCols1; ++j) {
+            
+            resultLinearIndex = (i * (numCols1 + numCols2)) + j;
+            if( j < numCols1){
+            linearIndex = (i* numCols1) + j;
+            newMatrixData[resultLinearIndex] = m_matrix_Data[linearIndex];
+            }
+            else {
+                linearIndex = (i * numCols2) + (j - numCols1);
+                newMatrixData[resultLinearIndex] = matrix2.m_matrix_Data[linearIndex];
+            }
+
+        }
+    }
+
+    m_nCols = numCols1 + numCols2;
+    m_nElements = m_nRows * m_nCols;
+    delete[] m_matrix_Data;
+    m_matrix_Data = new T[m_nElements];
+    for(int i = 0; i < m_nElements; ++i)
+        m_matrix_Data[i] = newMatrixData[i];
+
+    delete[] newMatrixData;
+    return true;
+}
+
+
+/*************************************************************/
+// Overloading Operators
+/*************************************************************/
+
 // ---------------- Overloading Operators ----------//
 
 // matrix + matrix
@@ -184,7 +394,6 @@ qbMatrix2<T> operator+ (const T& lhs,const qbMatrix2<T>& rhs){
 	int num_Elements = numCols*numRows;
 	T *tempResult = new T[num_Elements];
 	for(int i=0 ; i< num_Elements; i++){
-#pragma HLS PIPELINE
 tempResult[i] = lhs + rhs.m_matrix_Data[i];
 	}
 qbMatrix2<T> result(numRows, numCols, tempResult);
@@ -286,11 +495,9 @@ qbMatrix2<T> operator*(const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
     if (l_numCols == r_numRows) {
         T* tempResult = new T[lhs.m_nRows * rhs.m_nCols];
         for (int lhsRow = 0; lhsRow < l_numRows; lhsRow++) {
-#pragma HLS PIPELINE
             for (int rhsCol = 0; rhsCol < r_numCols; rhsCol++) {
-                T elementResult = T(0);
+                T elementResult = 0.0;
                 for (int lhsCol = 0; lhsCol < l_numCols; lhsCol++) {
-#pragma HLS UNROLL
                     int lhsLinearIndex = (lhsRow * l_numCols) + lhsCol;
                     int rhsLinearIndex = (lhsCol * r_numCols) + rhsCol;
                     elementResult += (lhs.m_matrix_Data[lhsLinearIndex] * rhs.m_matrix_Data[rhsLinearIndex]);
@@ -307,175 +514,27 @@ qbMatrix2<T> operator*(const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
         return result;
     }
 }
-
+// ***************************************************************/
+// the equality operator
+//****************************************************************/
 // the == operator overloading. 
+
 template <class T>
 bool qbMatrix2<T>::operator==(const qbMatrix2<T>& rhs) {
-    // Check if the matrices are of same size, if not return false.
+    // Check if the matrices are of same size, if not return false. &&
     if ((this->m_nRows != rhs.m_nRows) || (this->m_nCols != rhs.m_nCols))
         return false;
     // Check if the elements are equal
     bool flag = true;
     for (int i = 0; i < this->m_nElements; ++i) {
-        if (!CloseEnough(this->m_matrix_Data[i], rhs.m_matrix_Data[i]))
+        if (this->m_matrix_Data[i] != rhs.m_matrix_Data[i])
             flag = false;
     }
     return flag;
 }
-
-
-// ---------------- Element Access ---------------- //
-
-template<class T>
-T qbMatrix2<T>::GetElement(int row, int col) const {
-    if (row < 0 || row >= m_nRows || col < 0 || col >= m_nCols)
-        throw std::out_of_range("Index out of range");
-    return m_matrix_Data[Sub2Ind(row, col)];
-}
-
-template<class T>
-bool qbMatrix2<T>::SetElement(int row, int col, const T& value) {
-    if (row < 0 || row >= m_nRows || col < 0 || col >= m_nCols)
-        return false;
-    m_matrix_Data[Sub2Ind(row, col)] = value;
-    return true;
-}
-
-template<class T>
-int qbMatrix2<T>::GetNumRows() const { return m_nRows; }
-
-template<class T>
-int qbMatrix2<T>::GetNumCols() const { return m_nCols; }
-
-// ---------------- Utility Functions ---------------- //
-
-template<class T>
-int qbMatrix2<T>::Sub2Ind(int row, int col) const {
-    return row * m_nCols + col;
-}
-
-template<class T>
-bool qbMatrix2<T>::IsSquare() { 
-    if(m_nRows == m_nCols){
-        return true;
-    } else {
-        return false;
-    }
-}
-
-template<class T>
-bool qbMatrix2<T>::CloseEnough(T f1, T f2) {
-    return std::fabs(f1 - f2) < 1e-9;
-}
-
-template<class T>
-bool qbMatrix2<T>::Seperate(qbMatrix2<T> *matrix1, qbMatrix2<T> *matrix2, int colNum) {
-    // Compute the sizes of the new matrices.
-    int numRows = m_nRows;
-    int numCols1 = colNum;
-    int numCols2 = m_nCols - colNum;
-    // resize the matrix to fit the new sizes
-    matrix1->resize(numRows, numCols1);
-    matrix2->resize(numRows, numCols2);
-    // loop over the original matrix, and copy the elements to the new matrices
-    for (int row = 0; row < m_nRows; ++row) {
-        for (int col = 0; col < m_nCols; ++col) {
-            if (col < colNum) {
-                matrix1->SetElement(row, col, this->GetElement(row, col));
-            } else {
-                matrix2->SetElement(row, col - colNum, this->GetElement(row, col));
-            }
-        }
-    }
-    return true;
-}
-
-bool qbMatrix2<T>::Compare(const qbMatrix2<T>& matrix1, double tolerance) {
-*/
-
-
-// ------------------
-// Global-scope free function Compare
-template <class T>
-bool Compare(const qbMatrix2<T>& matrix1, const qbMatrix2<T>& matrix2, double tolerance) {
-    if (matrix1.m_nRows != matrix2.m_nRows || matrix1.m_nCols != matrix2.m_nCols) {
-        return false;
-    }
-    int m_nelements = matrix1.m_nRows * matrix1.m_nCols;
-    double cummulativeSum = 0.0;
-    for (int i = 0; i < m_nelements; i++) {
-        T element1 = matrix1.m_matrix_Data[i];
-        T element2 = matrix2.m_matrix_Data[i];
-        cummulativeSum += ((element1 - element2) * (element1 - element2));
-    }
-    double finalValue = sqrt(cummulativeSum / ((matrix1.m_nRows * matrix1.m_nCols) - 1));
-    return (finalValue < tolerance);
-}
-///////////////////////////SHID//////////////////////////////////
-template <class T> //to find the greatest element in a row
-int qbMatrix2<T>::FindRowWithMaxElement(int colNumber, int StartingRow){
-	if(colNumber < 0 || colNumber >= m_nCols || StartingRow < 0 || StartingRow >= m_nRows)
-		throw std::out_of_range("Index out of range");
-	int maxRow = StartingRow;
-	T maxValue = std::fabs(m_matrix_Data[Sub2Ind(StartingRow, colNumber)]);
-	for(int row = StartingRow + 1; row < m_nRows; ++row){
-		T currentValue = std::fabs(m_matrix_Data[Sub2Ind(row, colNumber)]);
-		if(currentValue > maxValue){
-			maxValue = currentValue;
-			maxRow = row;
-		}
-	}
-	return maxRow;
-}
-////////////////////////////////////////////////////////////////////
-
-template <class T>
-void qbMatrix2<T>::SwapRow(int i,int j){
- 
-    //Store a temporary copy of row i
-    T* tempRow = new T[m_nCols];
-
-    for(int k=0 ; k<m_nCols ; ++k){
-        tempRow[k] = m_matrix_Data[Sub2Ind(i,k)];
-    }
-    for(int k=0 ; k<m_nCols ; ++k){
-        m_matrix_Data[Sub2Ind(i,k)] = m_matrix_Data[Sub2Ind(j,k)];
-    }
-    for(int k=0 ; k<m_nCols ; ++k){
-        m_matrix_Data[Sub2Ind(j,k)] = tempRow[k];
-    }
-    //basic swap temp = a; a = b; b = temp;
-    delete[] tempRow;
-}
-
-template <class T>
-void qbMatrix2<T>::MultAdd(int i, int j, T multFactor){
-    //Multiply row j by multFactor and add to row i
-    for(int col=0 ; col<m_nCols ; ++col){
-        m_matrix_Data[Sub2Ind(i,col)] += (multFactor * m_matrix_Data[Sub2Ind(j,col)]);
-    }
-}
-
-template <class T>
-void qbMatrix2<T>::RowMult(int i, T multFactor){
-    for(int col=0 ; col<m_nCols ; ++col){
-        m_matrix_Data[Sub2Ind(i,col)] *= multFactor;
-    }
-}
-
-// ---------------- Print ---------------- //
-
-template<class T>
-void qbMatrix2<T>::PrintMatrix() {
-    for (int i = 0; i < m_nRows; i++) {
-        for (int j = 0; j < m_nCols; j++)
-            std::cout << std::setw(10) << m_matrix_Data[Sub2Ind(i, j)] << " ";
-        std::cout << "\n";
-    }
-}
-//just lifted this code out of the test code.....
-
-// ---------------- Inverse function ---------------- //
+/***************************************************************** */
+//Inverse of a matrix using Gauss-Jordan elimination
+/***************************************************************** */
 
 bool qbMatrix2<T>::Inverse() {
     if(!IsSquare()) {
@@ -493,6 +552,7 @@ int originalNumCols = m_nCols;
     Join(identityMatrix);
     
     //Begin the Gauss Jordan elimination process
+    int cRow, cCol;
     int maxCount = 100;
     int count = 0;
     bool completeFlag = false;
@@ -508,14 +568,14 @@ int originalNumCols = m_nCols;
             }
 
             // Make the diagonal element 1 by multiplying the row by the inverse of the diagonal element
-            if (m_matrix_Data[Sub2Ind(cRow, cCol)] != 0) {
+            if (m_matrix_Data[Sub2Ind(cRow, cCol)] != 1.0) {
                 T multFactor = 1.0 / m_matrix_Data[Sub2Ind(cRow, cCol)];
                 RowMult(cRow, multFactor);
             }
 
             // Eliminate below-diagonal elements in this column
             for (int rowIndex = cRow + 1; rowIndex < m_nRows; ++rowIndex) {
-                if (!CloseEnough(m_matrix_Data[Sub2Ind(rowIndex, cCol)], 0.0)) {
+                if (!CloseEnough(m_matrix_Data[Sub2Ind(rowIndex, cCol)], 0.0)) { //elm actually 0 so skip op
                     int rowOneIndex = cCol;
                     T currentElement = m_matrix_Data[Sub2Ind(rowIndex, cCol)];
                     T rowOneValue = m_matrix_Data[Sub2Ind(rowOneIndex, cCol)];
@@ -529,7 +589,7 @@ int originalNumCols = m_nCols;
             // Eliminate off-diagonal elements in this row
             for (int colIndex = cCol + 1; colIndex < m_nCols; ++colIndex) {
                 if (!CloseEnough(m_matrix_Data[Sub2Ind(cRow, colIndex)], 0.0)) {
-                    int rowOneIndex = cCol;
+                    int rowOneIndex = colIndex;
                     T currentElement = m_matrix_Data[Sub2Ind(cRow, colIndex)];
                     T rowOneValue = m_matrix_Data[Sub2Ind(rowOneIndex, colIndex)];
                     if (!CloseEnough(rowOneValue, 0.0)) {
@@ -561,4 +621,5 @@ int originalNumCols = m_nCols;
     }
     return completeFlag;
 }
-#endif // QBMATRIX2_H
+
+#endif
