@@ -13,7 +13,7 @@
 using namespace std;
 
 // ---------------- Print ---------------- //
-
+/*
 template<class T>
 void qbMatrix2<T>::PrintMatrix() {
     for (int i = 0; i < m_nRows; i++) {
@@ -22,9 +22,9 @@ void qbMatrix2<T>::PrintMatrix() {
         std::cout << "\n";
     }
 }
-
+*/
 int main() {
-    std::string filename = "../Downloads/testmatrix.csv";
+    std::string filename = "../Downloads/test_matrices.csv";
 
     /*Openfile*/
     ifstream input(filename);
