@@ -155,5 +155,55 @@ testcode.cpp:26:12: error: a function-definition is not allowed here before ‘{
 testcode.cpp:145:1: error: expected ‘}’ at end of input
  }
 
+ //The error log 2
+ ////////////////////////////////////////////////////////////
+ g++ -o testcode testcode.cpp -std=c++17
+In file included from testcode.cpp:11:0:
+qbMatrix.h:1:0: error: unterminated #ifndef
+ #ifndef QBMATRIX2_H
+ 
+In file included from testcode.cpp:11:0:
+qbMatrix.h: In function ‘bool Compare(const qbMatrix2<T>&, double)’:
+qbMatrix.h:353:21: error: ‘m_nRows’ was not declared in this scope
+     if((numRows1 != m_nRows) || (numCols1 != m_nCols)){
+                     ^~~~~~~
+qbMatrix.h:353:21: note: suggested alternative: ‘numRows1’
+     if((numRows1 != m_nRows) || (numCols1 != m_nCols)){
+                     ^~~~~~~
+                     numRows1
+qbMatrix.h:353:46: error: ‘m_nCols’ was not declared in this scope
+     if((numRows1 != m_nRows) || (numCols1 != m_nCols)){
+                                              ^~~~~~~
+qbMatrix.h:353:46: note: suggested alternative: ‘numCols1’
+     if((numRows1 != m_nRows) || (numCols1 != m_nCols)){
+                                              ^~~~~~~
+                                              numCols1
+qbMatrix.h:361:22: error: ‘m_matrix_Data’ was not declared in this scope
+         T element2 = m_matrix_Data[i];
+                      ^~~~~~~~~~~~~
+qbMatrix.h:364:30: error: ‘commulativeSum’ was not declared in this scope
+     double finalValue = sqrt(commulativeSum / ((numRows1 * numCols1) - 1));
+                              ^~~~~~~~~~~~~~
+qbMatrix.h:364:30: note: suggested alternative: ‘cummulativeSum’
+     double finalValue = sqrt(commulativeSum / ((numRows1 * numCols1) - 1));
+                              ^~~~~~~~~~~~~~
+                              cummulativeSum
+qbMatrix.h:375:1: error: a template declaration cannot appear at block scope
+ template <class T> //to find the greatest element in a row
+ ^~~~~~~~
+qbMatrix.h:399:1: error: a template declaration cannot appear at block scope
+ template<class T>
+ ^~~~~~~~
+qbMatrix.h:413:1: error: a template declaration cannot appear at block scope
+ template<class T>
+ ^~~~~~~~
+qbMatrix.h:436:24: error: qualified-id in declaration before ‘(’ token
+ bool qbMatrix2<T>::Join(const qbMatrix2<T>& matrix2) {
+                        ^
+testcode.cpp:145:1: error: expected ‘}’ at end of input
+ }
+ ^
+
+
 
 
