@@ -203,6 +203,162 @@ qbMatrix.h:436:24: error: qualified-id in declaration before ‘(’ token
 testcode.cpp:145:1: error: expected ‘}’ at end of input
  }
  ^
+//////////////3 problems////////////////////////////////////////////
+
+g++ -o testcode testcode.cpp -std=c++17
+In file included from testcode.cpp:10:0:
+qbMatrix.h:393:1: error: expected unqualified-id before ‘delete’
+ delete[] newMatrixData;
+ ^~~~~~
+qbMatrix.h:539:16: error: ‘T’ was not declared in this scope
+ bool qbMatrix2<T>::Inverse() {
+                ^
+qbMatrix.h:539:17: error: template argument 1 is invalid
+ bool qbMatrix2<T>::Inverse() {
+                 ^
+qbMatrix.h: In function ‘bool Inverse()’:
+qbMatrix.h:540:9: error: ‘IsSquare’ was not declared in this scope
+     if(!IsSquare()) {
+         ^~~~~~~~
+qbMatrix.h:547:15: error: ‘T’ was not declared in this scope
+     qbMatrix2<T> identityMatrix(m_nRows, m_nCols);
+               ^
+qbMatrix.h:547:16: error: template argument 1 is invalid
+     qbMatrix2<T> identityMatrix(m_nRows, m_nCols);
+                ^
+qbMatrix.h:547:33: error: ‘m_nRows’ was not declared in this scope
+     qbMatrix2<T> identityMatrix(m_nRows, m_nCols);
+                                 ^~~~~~~
+qbMatrix.h:547:42: error: ‘m_nCols’ was not declared in this scope
+     qbMatrix2<T> identityMatrix(m_nRows, m_nCols);
+                                          ^~~~~~~
+qbMatrix.h:547:49: error: expression list treated as compound expression in initializer [-fpermissive]
+     qbMatrix2<T> identityMatrix(m_nRows, m_nCols);
+                                                 ^
+qbMatrix.h:548:20: error: request for member ‘SettoIdentity’ in ‘identityMatrix’, which is of non-class type ‘int’
+     identityMatrix.SettoIdentity();
+                    ^~~~~~~~~~~~~
+qbMatrix.h:552:5: error: ‘Join’ was not declared in this scope
+     Join(identityMatrix);
+     ^~~~
+qbMatrix.h:552:5: note: suggested alternative: ‘sin’
+     Join(identityMatrix);
+     ^~~~
+     sin
+qbMatrix.h:564:28: error: ‘FindRowWithMaxElement’ was not declared in this scope
+             int maxIndex = FindRowWithMaxElement(cCol, cRow);
+                            ^~~~~~~~~~~~~~~~~~~~~
+qbMatrix.h:566:17: error: ‘SwapRow’ was not declared in this scope
+                 SwapRow(cRow, maxIndex);
+                 ^~~~~~~
+qbMatrix.h:570:17: error: ‘m_matrix_Data’ was not declared in this scope
+             if (m_matrix_Data[Sub2Ind(cRow, cCol)] != 0) {
+                 ^~~~~~~~~~~~~
+qbMatrix.h:570:31: error: ‘Sub2Ind’ was not declared in this scope
+             if (m_matrix_Data[Sub2Ind(cRow, cCol)] != 0) {
+                               ^~~~~~~
+qbMatrix.h:571:19: error: expected ‘;’ before ‘multFactor’
+                 T multFactor = 1.0 / m_matrix_Data[Sub2Ind(cRow, cCol)];
+                   ^~~~~~~~~~
+qbMatrix.h:572:31: error: ‘multFactor’ was not declared in this scope
+                 RowMult(cRow, multFactor);
+                               ^~~~~~~~~~
+qbMatrix.h:572:17: error: ‘RowMult’ was not declared in this scope
+                 RowMult(cRow, multFactor);
+                 ^~~~~~~
+qbMatrix.h:577:34: error: ‘m_matrix_Data’ was not declared in this scope
+                 if (!CloseEnough(m_matrix_Data[Sub2Ind(rowIndex, cCol)], 0.0)) {
+                                  ^~~~~~~~~~~~~
+qbMatrix.h:577:48: error: ‘Sub2Ind’ was not declared in this scope
+                 if (!CloseEnough(m_matrix_Data[Sub2Ind(rowIndex, cCol)], 0.0)) {
+                                                ^~~~~~~
+qbMatrix.h:577:22: error: ‘CloseEnough’ was not declared in this scope
+                 if (!CloseEnough(m_matrix_Data[Sub2Ind(rowIndex, cCol)], 0.0)) {
+                      ^~~~~~~~~~~
+qbMatrix.h:579:23: error: expected ‘;’ before ‘currentElement’
+                     T currentElement = m_matrix_Data[Sub2Ind(rowIndex, cCol)];
+                       ^~~~~~~~~~~~~~
+qbMatrix.h:580:23: error: expected ‘;’ before ‘rowOneValue’
+                     T rowOneValue = m_matrix_Data[Sub2Ind(rowOneIndex, cCol)];
+                       ^~~~~~~~~~~
+qbMatrix.h:581:38: error: ‘rowOneValue’ was not declared in this scope
+                     if (!CloseEnough(rowOneValue, 0.0)) {
+                                      ^~~~~~~~~~~
+qbMatrix.h:581:38: note: suggested alternative: ‘rowOneIndex’
+                     if (!CloseEnough(rowOneValue, 0.0)) {
+                                      ^~~~~~~~~~~
+                                      rowOneIndex
+qbMatrix.h:582:27: error: expected ‘;’ before ‘correctionFactor’
+                         T correctionFactor = -(currentElement / rowOneValue);
+                           ^~~~~~~~~~~~~~~~
+qbMatrix.h:583:56: error: ‘correctionFactor’ was not declared in this scope
+                         MultAdd(rowIndex, rowOneIndex, correctionFactor);
+                                                        ^~~~~~~~~~~~~~~~
+qbMatrix.h:583:25: error: ‘MultAdd’ was not declared in this scope
+                         MultAdd(rowIndex, rowOneIndex, correctionFactor);
+                         ^~~~~~~
+qbMatrix.h:590:34: error: ‘m_matrix_Data’ was not declared in this scope
+                 if (!CloseEnough(m_matrix_Data[Sub2Ind(cRow, colIndex)], 0.0)) {
+                                  ^~~~~~~~~~~~~
+qbMatrix.h:590:48: error: ‘Sub2Ind’ was not declared in this scope
+                 if (!CloseEnough(m_matrix_Data[Sub2Ind(cRow, colIndex)], 0.0)) {
+                                                ^~~~~~~
+qbMatrix.h:590:22: error: ‘CloseEnough’ was not declared in this scope
+                 if (!CloseEnough(m_matrix_Data[Sub2Ind(cRow, colIndex)], 0.0)) {
+                      ^~~~~~~~~~~
+qbMatrix.h:592:23: error: expected ‘;’ before ‘currentElement’
+                     T currentElement = m_matrix_Data[Sub2Ind(cRow, colIndex)];
+                       ^~~~~~~~~~~~~~
+qbMatrix.h:593:23: error: expected ‘;’ before ‘rowOneValue’
+                     T rowOneValue = m_matrix_Data[Sub2Ind(rowOneIndex, colIndex)];
+                       ^~~~~~~~~~~
+qbMatrix.h:594:38: error: ‘rowOneValue’ was not declared in this scope
+                     if (!CloseEnough(rowOneValue, 0.0)) {
+                                      ^~~~~~~~~~~
+qbMatrix.h:594:38: note: suggested alternative: ‘rowOneIndex’
+                     if (!CloseEnough(rowOneValue, 0.0)) {
+                                      ^~~~~~~~~~~
+                                      rowOneIndex
+qbMatrix.h:595:27: error: expected ‘;’ before ‘correctionFactor’
+                         T correctionFactor = -(currentElement / rowOneValue);
+                           ^~~~~~~~~~~~~~~~
+qbMatrix.h:596:52: error: ‘correctionFactor’ was not declared in this scope
+                         MultAdd(cRow, rowOneIndex, correctionFactor);
+                                                    ^~~~~~~~~~~~~~~~
+qbMatrix.h:596:25: error: ‘MultAdd’ was not declared in this scope
+                         MultAdd(cRow, rowOneIndex, correctionFactor);
+                         ^~~~~~~
+qbMatrix.h:603:20: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class qbMatrix2’
+         qbMatrix2<T> leftHalf;
+                    ^
+qbMatrix.h:603:20: note:   expected a type, got ‘T’
+qbMatrix.h:604:20: error: type/value mismatch at argument 1 in template parameter list for ‘template<class T> class qbMatrix2’
+         qbMatrix2<T> rightHalf;
+                    ^
+qbMatrix.h:604:20: note:   expected a type, got ‘T’
+qbMatrix.h:605:9: error: invalid use of ‘this’ in non-member function
+         this->Seperate(&leftHalf, &rightHalf, originalNumCols);
+         ^~~~
+qbMatrix.h:612:13: error: ‘m_nElements’ was not declared in this scope
+             m_nElements = m_nRows * m_nCols;
+             ^~~~~~~~~~~
+qbMatrix.h:613:22: error: ‘m_matrix_Data’ was not declared in this scope
+             delete[] m_matrix_Data;
+                      ^~~~~~~~~~~~~
+qbMatrix.h:614:33: error: ‘T’ does not name a type
+             m_matrix_Data = new T[m_nElements];
+                                 ^
+qbMatrix.h:616:46: error: request for member ‘m_matrix_Data’ in ‘rightHalf’, which is of non-class type ‘int’
+                 m_matrix_Data[i] = rightHalf.m_matrix_Data[i];
+                                              ^~~~~~~~~~~~~
+testcode.cpp: In function ‘int main()’:
+testcode.cpp:95:40: error: ‘void qbMatrix2<T>::PrintMatrix() [with T = double]’ is private within this context
+             currentMatrix->PrintMatrix();
+                                        ^
+In file included from testcode.cpp:10:0:
+qbMatrix.h:528:6: note: declared private here
+ void qbMatrix2<T>::PrintMatrix() {
+      ^~~~~~~~~~~~
 
 
 
