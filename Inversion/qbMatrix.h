@@ -1,11 +1,11 @@
-#ifndef QBMATRIX2_H
-#define QBMATRIX2_H
-
 #include <vector>
 #include <cmath>
 #include <stdexcept>
 #include <iostream>
 #include <iomanip>
+
+#ifndef QBMATRIX2_H
+#define QBMATRIX2_H
 
 // Template class qbMatrix2 for generic matrix handling
 // Provides constructors, destructors, element access, resize, identity, comparison,
@@ -327,7 +327,7 @@ bool qbMatrix2<T>::operator==(const qbMatrix2<T>& rhs) {
 // ---------------- Element Access ---------------- //
 
 template<class T>
-T qbMatrix2<T>::GetElement(int row, int col) const {
+T qbMatrix2<T>::GetElement(int row, int col) {
     if (row < 0 || row >= m_nRows || col < 0 || col >= m_nCols)
         throw std::out_of_range("Index out of range");
     return m_matrix_Data[Sub2Ind(row, col)];
@@ -376,7 +376,7 @@ bool qbMatrix2<T>::Seperate(qbMatrix2<T> *matrix1, qbMatrix2<T> *matrix2, int co
     int numCols2 = m_nCols - colNum;
     // resize the matrix to fit the new sizes
     matrix1->resize(numRows, numCols1);
-    matrix2->resize(numRows, numCols2);
+    matrix2->resize(numRows, numCols1);
     // loop over the original matrix, and copy the elements to the new matrices
     for (int row = 0; row < m_nRows; ++row) {
         for (int col = 0; col < m_nCols; ++col) {
@@ -390,7 +390,66 @@ bool qbMatrix2<T>::Seperate(qbMatrix2<T> *matrix1, qbMatrix2<T> *matrix2, int co
     return true;
 }
 
+delete[] newMatrixData;
+//bool qbMatrix2<T>::Join(const qbMatrix2<T>& matrix2) {
+    /*// ...existing code...
+// Stub for missing Compare function
+template<class T>
 bool qbMatrix2<T>::Compare(const qbMatrix2<T>& matrix1, double tolerance) {
+    if (m_nRows != matrix1.m_nRows || m_nCols != matrix1.m_nCols) return false;
+    for (int i = 0; i < m_nElements; ++i) {
+        if (std::fabs(m_matrix_Data[i] - matrix1.m_matrix_Data[i]) > tolerance) return false;
+    }
+    return true;
+}
+
+// Stub for missing FindRowWithMaxElement function
+template<class T>
+int qbMatrix2<T>::FindRowWithMaxElement(int colNumber, int StartingRow) {
+    int maxRow = StartingRow;
+    T maxVal = std::fabs(m_matrix_Data[Sub2Ind(StartingRow, colNumber)]);
+    for (int i = StartingRow + 1; i < m_nRows; ++i) {
+        T val = std::fabs(m_matrix_Data[Sub2Ind(i, colNumber)]);
+        if (val > maxVal) {
+            maxVal = val;
+            maxRow = i;
+        }
+    }
+    return maxRow;
+}
+    int numRows1 = m_nRows;
+    int numRows2 = matrix2.m_nRows;
+    int numCols1 = m_nCols;
+    int numCols2 = matrix2.m_nCols;
+    if (numRows1 != numRows2) {
+        throw std::invalid_argument("Matrices must have the same number of rows to join");
+    }
+    // Allocate the memory for the result
+    // Note that only the number of columns increases.
+    T* newMatrixData = new T[numRows1 * (numCols1 + numCols2)];
+    // copy the two matrices into the new matrix
+    int linearIndex, resultLinearIndex;
+    for (int row = 0; row < numRows1; ++row) {
+        for (int col = 0; col < (numCols1 + numCols2); ++col) {
+            resultLinearIndex = row * (numCols1 + numCols2) + col;
+            if (col < numCols1) {
+                linearIndex = (row * numCols1) + col;
+                newMatrixData[resultLinearIndex] = m_matrix_Data[linearIndex];
+            } else {
+                linearIndex = (row * numCols2) + (col - numCols1);
+                newMatrixData[resultLinearIndex] = matrix2.m_matrix_Data[linearIndex];
+            }
+        }
+    }
+    m_nCols = numCols1 + numCols2;
+    m_nElements = m_nRows * m_nCols;
+    delete[] m_matrix_Data;
+    m_matrix_Data = new T[m_nElements];
+    for (int i = 0; i < m_nElements; ++i)
+        m_matrix_Data[i] = newMatrixData[i];
+    delete[] newMatrixData;
+    return true;
+}
 */
 
 
@@ -467,10 +526,13 @@ void qbMatrix2<T>::RowMult(int i, T multFactor){
 
 template<class T>
 void qbMatrix2<T>::PrintMatrix() {
+    int nRows = this->GetNumRows();
+    int nCols = this->GetNumCols();
     for (int i = 0; i < m_nRows; i++) {
-        for (int j = 0; j < m_nCols; j++)
-            std::cout << std::setw(10) << m_matrix_Data[Sub2Ind(i, j)] << " ";
-        std::cout << "\n";
+        for (int j = 0; j < m_nCols; j++){
+            std::cout<< std::fixed << setprecision(3) << this->GetElement(i,j) << " ";
+        }
+        std::cout << std::endl;
     }
 }
 //just lifted this code out of the test code.....

@@ -50,8 +50,10 @@ public:
     template <class U> friend qbMatrix2<U> operator*(const qbMatrix2<U>& lhs, const U& rhs);
 
     bool Seperate(qbMatrix2<T>* matrix1, qbMatrix2<T>* matrix2, int colNum);
+
 public:
-    int Sub2Ind(int row, int col) const;
+
+    int Sub2Ind(int row, int col);
     bool IsSquare();
     bool CloseEnough(T f1, T f2);
     void SwapRow(int i, int j);
@@ -151,6 +153,9 @@ bool qbMatrix2<T>::resize(int numRows, int numCols) {
 
 template<class T>
 void qbMatrix2<T>::SettoIdentity() {
+
+using qbMatrix2<T>::IsSquare; //1
+
     if (!IsSquare())
     throw std::runtime_error("Identity only for square matrices");
 
@@ -165,6 +170,9 @@ void qbMatrix2<T>::SettoIdentity() {
 
  template<class T>
 T qbMatrix2<T>::GetElement(int row, int col) {
+
+    using qbMatrix2<T>::Sub2Ind;//2
+
     int linearIndex = Sub2Ind(row, col);
     if(linearIndex >= 0){
         return m_matrix_Data[linearIndex];
@@ -176,6 +184,9 @@ T qbMatrix2<T>::GetElement(int row, int col) {
 
 template<class T>
 bool qbMatrix2<T>::SetElement(int row, int col, const T& elementValue){
+
+    using qbMatrix2<T>::Sub2Ind;//3
+
     int linearIndex = Sub2Ind(row, col);
     if(linearIndex >= 0){
         m_matrix_Data[linearIndex] = elementValue;
@@ -217,6 +228,10 @@ bool qbMatrix2<T>::Compare(const qbMatrix2<T>& matrix1, double tolerance) {
 
 template<class T>
 bool qbMatrix2<T>::Seperate(qbMatrix2<T> *matrix1, qbMatrix2<T> *matrix2, int colNum) {
+
+    using qbMatrix2<T>::GetElement; //4
+    using qbMatrix2<T>::SetElement; //5
+
     // Compute the sizes of the new matrices.
     int numRows = m_nRows;
     int numCols1 = colNum;
@@ -245,7 +260,7 @@ bool qbMatrix2<T>::Seperate(qbMatrix2<T> *matrix1, qbMatrix2<T> *matrix2, int co
 template<class T>
 int qbMatrix2<T>::Sub2Ind(int row, int col){
     if((row < m_nRows) && (row >= 0) && (col < m_nCols) && (col >= 0)){
-        return (row * m_nCols) + col;
+        return ((row * m_nCols) + col);
     }
     else{
         return -1;
@@ -269,12 +284,18 @@ bool qbMatrix2<T>::IsSquare() {
 template <class T>
 void qbMatrix2<T>::RowMult(int i, T multFactor){
     for(int col=0 ; col<m_nCols ; ++col){
+
+        using qbMatrix2<T>::Sub2Ind; //6
+
         m_matrix_Data[Sub2Ind(i,col)] *= multFactor;
     }
 }
 
 template <class T>
 void qbMatrix2<T>::MultAdd(int i, int j, T multFactor){
+
+using qbMatrix2<T>::Sub2Ind; //7
+
     //Multiply row j by multFactor and add to row i
     for(int col=0 ; col<m_nCols ; ++col){
         m_matrix_Data[Sub2Ind(i,col)] += (multFactor * m_matrix_Data[Sub2Ind(j,col)]);
@@ -286,7 +307,7 @@ void qbMatrix2<T>::MultAdd(int i, int j, T multFactor){
 /************************************************************** */
 template <class T>
 int qbMatrix2<T>::FindRowWithMaxElement(int colNumber, int StartingRow){ 
-T tempValue m_matrix_Data[Sub2Ind(StartingRow,colNumber)];
+T tempValue = m_matrix_Data[Sub2Ind(StartingRow,colNumber)];
 int rowIndex = StartingRow;
 for(int i=StartingRow+1 ; i<m_nRows ; ++i){
     if(fabs(m_matrix_Data[Sub2Ind(i,colNumber)]) > fabs(tempValue)){
@@ -535,8 +556,21 @@ bool qbMatrix2<T>::operator==(const qbMatrix2<T>& rhs) {
 /***************************************************************** */
 //Inverse of a matrix using Gauss-Jordan elimination
 /***************************************************************** */
-
+template <class T>
 bool qbMatrix2<T>::Inverse() {
+
+/*bringing member functions inside the scope*/
+    using qbMatrix2<T>::IsSquare;
+    using qbMatrix2<T>::Join;
+    using qbMatrix2<T>::FindRowWithMaxElement;
+    using qbMatrix2<T>::SwapRow;
+    using qbMatrix2<T>::RowMult;
+    using qbMatrix2<T>::CloseEnough;
+    using qbMatrix2<T>::MultAdd;
+    using qbMatrix2<T>::m_matrix_Data;
+    using qbMatrix2<T>::Sub2Ind;
+/****************************************** */
+
     if(!IsSquare()) {
         throw std::invalid_argument("Matrix must be square to compute inverse");
     }

@@ -322,7 +322,7 @@ qbMatrix2<T> operator*(const qbMatrix2<T>& lhs, const qbMatrix2<T>& rhs) {
 
 template <class T>
 bool qbMatrix2<T>::operator==(const qbMatrix2<T>& rhs) {
-    // Check if the matrices are of same size, if not return false.
+    // Check if the matrices are of same size, if not return false. &&
     if ((this->m_nRows != rhs.m_nRows) || (this->m_nCols != rhs.m_nCols))
         return false;
     // Check if the elements are equal

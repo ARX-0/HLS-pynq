@@ -190,6 +190,31 @@ int qbMatrix2<T>::GetNumRows() const { return m_nRows; }
 template<class T>
 int qbMatrix2<T>::GetNumCols() const { return m_nCols; }
 
+template <class T> bool Compare(const qbMatrix2<T>& matrix1, double tolerance){
+    //check whetehr or not its the same dimentions
+    int numRows1 = matrix1.m_nRows;
+    int numCols1 = matrix1.m_nCols;
+    int m_nelements = numRows1 * numCols1;
+    if((numRows1 != m_nRows) || (numCols1 != m_nCols)){
+        return false;
+    }
+
+    double cummulativeSum = 0.0;
+    for (int i = 0; i < m_nelements; i++)
+    {
+        T element1 = matrix1.m_matrix_Data[i];
+        T element2 = m_matrix_Data[i];
+        cummulativeSum += ((element1 - element2) * (element1 - element2));
+    }
+    double finalValue = sqrt(commulativeSum / ((numRows1 * numCols1) - 1));
+    if(finalValue < tolerance){
+        return true;
+    }
+    else{
+        return false;
+
+    
+}
 // ---------------- Utility Functions ---------------- //
 
 template<class T>
@@ -337,3 +362,51 @@ if(leftHalf == identityMatrix){
     }
 }
 }
+
+/////////////////////////////comare that shit///////////////////////////
+template <class T> bool Compare(const qbMatrix2<T>& matrix1, double tolerance){
+    //check whetehr or not its the same dimentions
+    int numRows1 = matrix1.m_nRows;
+    int numCols1 = matrix1.m_nCols;
+    int m_nelements = numRows1 * numCols1;
+    if((numRows1 != m_nRows) || (numCols1 != m_nCols)){
+        return false;
+    }
+
+    double cummulativeSum = 0.0;
+    for (int i = 0; i < m_nelements; i++)
+    {
+        T element1 = matrix1.m_matrix_Data[i];
+        T element2 = m_matrix_Data[i];
+        cummulativeSum += ((element1 - element2) * (element1 - element2));
+    }
+    double finalValue = sqrt(commulativeSum / ((numRows1 * numCols1) - 1));
+    if(finalValue < tolerance){
+        return true;
+    }
+    else{
+        return false;
+
+    
+}
+///////////////////////////SHID//////////////////////////////////
+template <class T> //to find the greatest element in a row
+int qbMatrix2<T>::FindRowWithMaxElement(int colNumber, int StartingRow){
+	if(colNumber < 0 || colNumber >= m_nCols || StartingRow < 0 || StartingRow >= m_nRows)
+		throw std::out_of_range("Index out of range");
+	int maxRow = StartingRow;
+	T maxValue = std::fabs(m_matrix_Data[Sub2Ind(StartingRow, colNumber)]);
+	for(int row = StartingRow + 1; row < m_nRows; ++row){
+		T currentValue = std::fabs(m_matrix_Data[Sub2Ind(row, colNumber)]);
+		if(currentValue > maxValue){
+			maxValue = currentValue;
+			maxRow = row;
+		}
+	}
+	return maxRow;
+}
+
+
+
+
+
