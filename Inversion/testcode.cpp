@@ -74,7 +74,7 @@ int main() {
                     qbMatrix2<double> rightMatrix;
                     newMatrix.Seperate(&leftMatrix, &rightMatrix, nRows);
                     leftMatrix.Inverse();
-                    if (Compare(leftMatrix, rightMatrix, 1e-9)) {
+                    if (leftMatrix.Compare(rightMatrix, 1e-9)) {
                         numSuccess++;
                         std::cout << "Test passed" << std::endl;
                     } else {
