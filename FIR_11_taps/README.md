@@ -1,5 +1,5 @@
-# HLS-pynq
-this repo gives you a progressive view upon making optimisations on HLS and implementation on the PYNQ-Z2 board
+# HLS-FIR
+this repo's file system gives you a progressive view upon making optimisations on HLS and implementation on the PYNQ-Z2 board for the FIR Filter
 
 ## C simulation result
 
